@@ -54,6 +54,44 @@ public class CircuitSchematicRender {
         }
     }
 
+    private static final int TRACE_PADDING = 2;
+
+    public static void renderLayer(Traces traces, GuiGraphics ctx, int x, int y, int scale, int color) {
+        int x1, x2, y1, y2;
+
+        for (var line : traces.iterateVerticals()) {
+            x1 = line.position() * scale + TRACE_PADDING + x;
+            x2 = line.position() * scale + scale - TRACE_PADDING + x;
+            y1 = line.start() * scale + TRACE_PADDING + y;
+            y2 = line.end() * scale - TRACE_PADDING + y;
+            ctx.fill(x1, y1, x2, y2, color);
+        }
+
+        for (var line : traces.iterateHorizontals()) {
+            x1 = line.start() * scale + TRACE_PADDING + x;
+            x2 = line.end() * scale - TRACE_PADDING + x;
+            y1 = line.position() * scale + TRACE_PADDING + y;
+            y2 = line.position() * scale + scale - TRACE_PADDING + y;
+            ctx.fill(x1, y1, x2, y2, color);
+        }
+
+//        for(var line : traces) {
+//            int x1, x2, y1, y2;
+//            if(line.vertical()) {
+//                x1 = line.position() * scale + x;
+//                x2 = line.position() * scale + scale + x;
+//                y1 = line.start() * scale + y;
+//                y2 = line.end() * scale + y;
+//            } else {
+//                x1 = line.start() * scale + x;
+//                x2 = line.end() * scale + x;
+//                y1 = line.position() * scale + y;
+//                y2 = line.position() * scale + scale + y;
+//            }
+//            ctx.fill(x1, y1, x2, y2, color);
+//        }
+    }
+
     public static void renderPoints(List<Point> points, GuiGraphics ctx, int x, int y, int scale, int color) {
         for(var point : points) {
             int x1 = x + point.x() * scale;

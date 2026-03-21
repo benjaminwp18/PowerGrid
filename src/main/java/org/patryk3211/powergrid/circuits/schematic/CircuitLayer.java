@@ -19,6 +19,7 @@ import net.minecraft.nbt.LongArrayTag;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Iterator;
 import java.util.List;
 
 public class CircuitLayer {
@@ -27,29 +28,49 @@ public class CircuitLayer {
     public static final int TOTAL_SIZE = GRID_SIZE * GRID_SIZE;
 
     private BitSet map;
+    private Traces traces;
 
     public CircuitLayer() {
         map = new BitSet(TOTAL_SIZE);
+        traces = new Traces(GRID_SIZE);
     }
 
     public void from(CircuitLayer other) {
         map = (BitSet) other.map.clone();
+        traces = new Traces(other.traces);
     }
 
+    // TODO
     public LongArrayTag serializeNbt() {
         return new LongArrayTag(map.toLongArray());
     }
 
+    // TODO
     public void deserialize(long[] tag) {
         map = BitSet.valueOf(tag);
     }
 
+    // TODO
     public void set(int x, int y) {
         map.set(x + y * GRID_SIZE);
     }
 
+    // TODO
     public boolean get(int x, int y) {
         return map.get(x + y * GRID_SIZE);
+    }
+
+    /**
+     * Gets a read-only view of this layer's traces
+     * @return a read-only view of this layer's traces
+     */
+//    public Traces getLines() {
+//        return traces.readOnly();
+//    }
+
+    // TODO: MAKE READONLY
+    public Traces getTraces() {
+        return traces;
     }
 
     public List<Line> calculateLines() {

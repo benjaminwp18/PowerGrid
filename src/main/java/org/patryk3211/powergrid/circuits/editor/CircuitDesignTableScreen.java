@@ -54,15 +54,11 @@ public class CircuitDesignTableScreen extends AbstractSimiContainerScreen<Circui
     private IconButton openButton;
 
     private final CircuitSchematic schematic;
-    private List<Line> linesFg;
-    private List<Line> linesBg;
 
     public CircuitDesignTableScreen(CircuitDesignTableMenu container, Inventory inv, Component title) {
         super(container, inv, title);
 
         schematic = container.contentHolder.getSchematic();
-        linesFg = schematic.front().calculateLines();
-        linesBg = schematic.back().calculateLines();
     }
 
     @Override
@@ -102,14 +98,14 @@ public class CircuitDesignTableScreen extends AbstractSimiContainerScreen<Circui
 
         ctx.blit(BACKGROUND, bgX, topPos, 0, 0, WIDTH, HEIGHT);
 
-        if(menu.contentHolder.schematicChanged) {
-            linesFg = schematic.front().calculateLines();
-            linesBg = schematic.back().calculateLines();
-            menu.contentHolder.schematicChanged = false;
-        }
+//        if(menu.contentHolder.schematicChanged) {
+//            linesFg = schematic.front().calculateLines();
+//            linesBg = schematic.back().calculateLines();
+//            menu.contentHolder.schematicChanged = false;
+//        }
 
-        CircuitSchematicRender.renderLayer(linesFg, ctx, leftPos + 44 - 11, topPos + 20, SCALE, COLOR_TRACE_FRONT);
-        CircuitSchematicRender.renderLayer(linesBg, ctx, leftPos + 44 - 11, topPos + 20, SCALE, COLOR_TRACE_BACK);
+        CircuitSchematicRender.renderLayer(schematic.front().getTraces(), ctx, leftPos + 44 - 11, topPos + 20, SCALE, COLOR_TRACE_FRONT);
+        CircuitSchematicRender.renderLayer(schematic.back().getTraces(), ctx, leftPos + 44 - 11, topPos + 20, SCALE, COLOR_TRACE_BACK);
         CircuitSchematicRender.renderComponents(schematic, ctx, leftPos + 44 - 11, topPos + 20, SCALE);
 
         ctx.drawCenteredString(font, title, leftPos + (WIDTH - 8) / 2, topPos + 3, 0xFFFFFF);

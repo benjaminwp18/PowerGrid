@@ -42,7 +42,7 @@ public class CircuitDesignTableBlockEntity extends SmartBlockEntity implements I
     private final Container inventory = new SimpleContainer(3);
 
     CircuitSchematic schematic = new CircuitSchematic();
-    boolean schematicChanged = false;
+//    boolean schematicChanged = false;
 
     public CircuitDesignTableBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -63,8 +63,8 @@ public class CircuitDesignTableBlockEntity extends SmartBlockEntity implements I
     protected void read(CompoundTag tag, boolean clientPacket) {
         super.read(tag, clientPacket);
         schematic.deserializeNbt(tag.getCompound("Schematic"));
-        if(clientPacket)
-            schematicChanged = true;
+//        if(clientPacket)
+//            schematicChanged = true;
     }
 
     @Override
