@@ -61,8 +61,19 @@ import static org.patryk3211.powergrid.circuits.schematic.CircuitSchematicRender
 
 public class CircuitDesignTableEditScreen<T extends CircuitEditMenu<?>> extends AbstractSimiContainerScreen<T> {
     private static final ResourceLocation BACKGROUND = PowerGrid.texture("gui/circuit_design_table_edit");
-    private static final int WIDTH = 182;
-    private static final int HEIGHT = 160;
+
+    // Total dimensions of schematic area, name field, and tool selection panel
+    private static final int WIDTH = 177;
+    private static final int HEIGHT = 157;
+
+    // Relative to topPos & leftPos/bgX
+    private static final int TOOL_BUTTONS_TOP = 39;
+    private static final int TOOL_BUTTON_SIZE = 18;
+    private static final int TOOL_BUTTON_SPACER = 2;
+    private static final int TOOL_SELECTION_TOP = TOOL_BUTTONS_TOP + 2 * TOOL_BUTTON_SIZE + 2 * TOOL_BUTTON_SPACER;
+
+    private static final int INVENTORY_TOP = HEIGHT - 6;
+    private static final int INVENTORY_LEFT = 1;
 
     public static final int CIRCUIT_SCALE = 8;
 
@@ -160,12 +171,18 @@ public class CircuitDesignTableEditScreen<T extends CircuitEditMenu<?>> extends 
 
     @Override
     protected void init() {
-        setWindowSize(WIDTH, HEIGHT + 4 + PLAYER_INVENTORY.getHeight());
+        topPos = 0;
+
+        setWindowSize(WIDTH, INVENTORY_TOP + PLAYER_INVENTORY.getHeight());
         setWindowOffset(11, 0);
 
         super.init();
 
-        editWidget = new CircuitEditWidget(font, schematic, leftPos + 13 - 11, topPos + 22, GRID_SIZE * CIRCUIT_SCALE, GRID_SIZE * CIRCUIT_SCALE);
+        editWidget = new CircuitEditWidget(
+                font, schematic,
+                leftPos + 13 - 12, topPos + 21,
+                GRID_SIZE * CIRCUIT_SCALE, GRID_SIZE * CIRCUIT_SCALE
+        );
         propertiesWidget = new ComponentPropertiesWidget(font, leftPos - 15, topPos + 12);
 
         var name = menu.contentHolder.getSchematicName();
@@ -181,13 +198,13 @@ public class CircuitDesignTableEditScreen<T extends CircuitEditMenu<?>> extends 
         currentComponent = null;
         selectedSlot = null;
 
-        final var BUTTONS_X = leftPos + 154 - 11;
-        acceptBtn = new IconButton(BUTTONS_X, topPos + 43, AllIcons.I_CONFIRM);
-        cancelBtn = new IconButton(BUTTONS_X, topPos + 63, ModIcons.I_CANCEL);
-        connectBtn = new IconButton(BUTTONS_X, topPos + 83, ModIcons.I_CONNECT);
-        deleteBtn = new IconButton(BUTTONS_X, topPos + 101, AllIcons.I_TRASH);
-        selectBtn = new IconButton(BUTTONS_X, topPos + 119, AllIcons.I_TARGET);
-        layerBtn = new IconButton(BUTTONS_X, topPos + 139, ModIcons.I_LAYER_FRONT);
+        final var BUTTONS_X = leftPos + 154 - 11 - 6;
+        acceptBtn = new IconButton(BUTTONS_X, topPos + TOOL_BUTTONS_TOP, AllIcons.I_CONFIRM);
+        cancelBtn = new IconButton(BUTTONS_X, topPos + TOOL_BUTTONS_TOP + TOOL_BUTTON_SIZE + TOOL_BUTTON_SPACER, ModIcons.I_CANCEL);
+        connectBtn = new IconButton(BUTTONS_X, topPos + TOOL_BUTTONS_TOP + 2 * TOOL_BUTTON_SIZE + 2 * TOOL_BUTTON_SPACER, ModIcons.I_CONNECT);
+        deleteBtn = new IconButton(BUTTONS_X, topPos + TOOL_BUTTONS_TOP + 3 * TOOL_BUTTON_SIZE + 2 * TOOL_BUTTON_SPACER, AllIcons.I_TRASH);
+        selectBtn = new IconButton(BUTTONS_X, topPos + TOOL_BUTTONS_TOP + 4 * TOOL_BUTTON_SIZE + 2 * TOOL_BUTTON_SPACER, AllIcons.I_TARGET);
+        layerBtn = new IconButton(BUTTONS_X, topPos + TOOL_BUTTONS_TOP + 5 * TOOL_BUTTON_SIZE + 3 * TOOL_BUTTON_SPACER, ModIcons.I_LAYER_FRONT);
 
         acceptBtn.setToolTip(TOOLTIP_SAVE);
         cancelBtn.setToolTip(TOOLTIP_DISCARD);
@@ -351,8 +368,7 @@ public class CircuitDesignTableEditScreen<T extends CircuitEditMenu<?>> extends 
     @Override
     protected void renderBg(GuiGraphics ctx, float delta, int mouseX, int mouseY) {
         int bgX = getLeftOfCentered(WIDTH);
-        int invY = topPos + HEIGHT + 4;
-        renderPlayerInventory(ctx, bgX + WIDTH - PLAYER_INVENTORY.getWidth(), invY);
+        renderPlayerInventory(ctx, bgX + INVENTORY_LEFT, topPos + INVENTORY_TOP);
 
         for(int k = 0; k < this.menu.slots.size(); ++k) {
             var slot = this.menu.slots.get(k);
@@ -381,7 +397,7 @@ public class CircuitDesignTableEditScreen<T extends CircuitEditMenu<?>> extends 
         CircuitSchematicRender.renderComponents(schematic, ctx, bpX, bpY, CIRCUIT_SCALE, mouseX, mouseY);
 
         if(currentTool.y > 0) {
-            ctx.blit(BACKGROUND, leftPos + 173 - 11, topPos + currentTool.y, 250, 0, 6, 18);
+            ctx.blit(BACKGROUND, leftPos + 173 - 17, topPos + currentTool.y, 250, 0, 6, 18);
         }
 
         if(selectedComponent != null) {
@@ -548,9 +564,9 @@ public class CircuitDesignTableEditScreen<T extends CircuitEditMenu<?>> extends 
     }
 
     private enum Tool {
-        CONNECT(83),
-        DELETE(101),
-        SELECT(119);
+        CONNECT(TOOL_SELECTION_TOP),
+        DELETE(TOOL_SELECTION_TOP + TOOL_BUTTON_SIZE),
+        SELECT(TOOL_SELECTION_TOP + 2 * TOOL_BUTTON_SIZE);
 
         public final int y;
 

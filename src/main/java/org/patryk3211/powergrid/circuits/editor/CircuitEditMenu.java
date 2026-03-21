@@ -34,7 +34,7 @@ public abstract class CircuitEditMenu<T extends SmartBlockEntity & ISchematicHol
 
     @Override
     protected void addSlots() {
-        addPlayerSlots(3, 182);
+        addPlayerSlots(0, 182 - 9);
     }
 
     @Override
