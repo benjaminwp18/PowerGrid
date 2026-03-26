@@ -73,7 +73,7 @@ public class CircuitDesignTableEditScreen<T extends CircuitEditMenu<?>> extends 
     private static final int TOOL_BUTTON_SPACER = 2;
     private static final int TOOL_SELECTION_TOP = TOOL_BUTTONS_TOP + 2 * TOOL_BUTTON_SIZE + 2 * TOOL_BUTTON_SPACER;
 
-    private static final int INVENTORY_TOP = HEIGHT - 6;
+    private static final int INVENTORY_TOP = HEIGHT - 6 - 11;
     private static final int INVENTORY_LEFT = 1;
 
     public static final int CIRCUIT_SCALE = 8;
@@ -390,7 +390,7 @@ public class CircuitDesignTableEditScreen<T extends CircuitEditMenu<?>> extends 
 
         ctx.blit(BACKGROUND, bgX, topPos, 0, 0, WIDTH, HEIGHT);
 
-        int bpX = bgX + 13, bpY = topPos + 22;
+        int bpX = editWidget.getX(), bpY = editWidget.getY();
         if(!backLayer) {
             CircuitSchematicRender.renderLayer(bgLines, ctx, bpX, bpY, CIRCUIT_SCALE, COLOR_TRACE_BACK);
             CircuitSchematicRender.renderLayer(fgLines, ctx, bpX, bpY, CIRCUIT_SCALE, COLOR_TRACE_FRONT);
